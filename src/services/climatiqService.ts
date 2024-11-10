@@ -8,6 +8,7 @@ interface EmissionRequestParams {
     passengers?: number;
     distance: number;
     distanceUnit: 'km' | 'mi';
+    weightUnit: 'g';
 }
 
 export const calculateEmissions = async ({
@@ -47,6 +48,39 @@ export const calculateEmissions = async ({
         return response.data;
     } catch (error) {
         console.error('Error calculating emissions:', error);
+        throw error;
+    }
+};
+
+export const calculateFoodEmissions = async ({
+                                                 activityId,
+                                                 weight,
+                                                 weightUnit,
+                                             }: EmissionRequestParams) => {
+    try {
+        const response = await axios.post(
+            BASE_URL,
+            {
+                emission_factor: {
+                    activity_id: activityId,
+                    data_version: "^0",
+                },
+                parameters: {
+                    weight,
+                    weight_unit: weightUnit,
+                },
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${CLIMATIQ_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error('Error calculating food emissions:', error);
         throw error;
     }
 };

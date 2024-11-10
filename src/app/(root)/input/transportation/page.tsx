@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import { calculateEmissions } from '@/services/climatiqService';
+import 'tailwindcss/tailwind.css';
 
 const TransportationPage: React.FC = () => {
     const [transportType, setTransportType] = useState<string>('car');
@@ -30,37 +31,48 @@ const TransportationPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Transportation Emissions</h1>
-            <label>
-                Transportation Type:
-                <select
-                    value={transportType}
-                    onChange={(e) => setTransportType(e.target.value)}
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+            <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">Transportation Emissions Calculator</h1>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Transportation Type:</label>
+                    <select
+                        value={transportType}
+                        onChange={(e) => setTransportType(e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="car">Car</option>
+                        <option value="bus">Bus</option>
+                    </select>
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Distance (km):</label>
+                    <input
+                        type="number"
+                        value={distance}
+                        onChange={(e) => setDistance(Number(e.target.value))}
+                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Passengers:</label>
+                    <input
+                        type="number"
+                        value={passengers}
+                        onChange={(e) => setPassengers(Number(e.target.value))}
+                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <button
+                    onClick={handleCalculate}
+                    className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition duration-300"
                 >
-                    <option value="car">Car</option>
-                    <option value="bus">Bus</option>
-                </select>
-            </label>
-            <label>
-                Distance (km):
-                <input
-                    type="number"
-                    value={distance}
-                    onChange={(e) => setDistance(Number(e.target.value))}
-                />
-            </label>
-            <label>
-                Passengers:
-                <input
-                    type="number"
-                    value={passengers}
-                    onChange={(e) => setPassengers(Number(e.target.value))}
-                />
-            </label>
-            <button onClick={handleCalculate}>Calculate Emissions</button>
-
-            {emissionResult && <p>{emissionResult}</p>}
+                    Calculate Emissions
+                </button>
+                {emissionResult && (
+                    <p className="mt-4 text-lg text-gray-800 font-semibold">{emissionResult}</p>
+                )}
+            </div>
         </div>
     );
 };
