@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { db } from '../index'; // Adjust if db import path differs
+import { carbonResults } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
 const CLIMATIQ_API_KEY = process.env.NEXT_PUBLIC_CLIMATIQ_API_KEY;
 const BASE_URL = 'https://api.climatiq.io/estimate';
@@ -7,11 +10,12 @@ interface EmissionRequestParams {
     activityId: string;
     passengers?: number;
     distance: number;
+    weight: number;
     distanceUnit: 'km' | 'mi';
     weightUnit: 'g';
 }
 
-export const calculateEmissions = async ({
+export const calculateTransportationEmissions = async ({
                                              activityId,
                                              passengers = 1,
                                              distance,
@@ -81,6 +85,19 @@ export const calculateFoodEmissions = async ({
         return response.data;
     } catch (error) {
         console.error('Error calculating food emissions:', error);
+        throw error;
+    }
+};
+
+export const saveEmissionResult = async (userId: string, type: string, result: number) => {
+    try {
+        await db.insert(carbonResults).values({
+            userId,
+            type,
+            result,
+        });
+    } catch (error) {
+        console.error('Error saving emission result:', error);
         throw error;
     }
 };
