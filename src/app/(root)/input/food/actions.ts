@@ -1,5 +1,5 @@
 // src/app/input/food/actions.ts
-'use server'
+'use server';
 
 import { auth } from '@clerk/nextjs/server';
 import { calculateFoodEmissions, saveEmissionResult } from '@/services/climatiqService';
@@ -16,27 +16,41 @@ export async function calculateEmissions(prevState: FormState, formData: FormDat
         return { message: 'Please log in to calculate emissions' };
     }
 
-    const foodType = formData.get('foodType') as string;
-    const servings = Number(formData.get('servings'));
-    const weight = servings * 75; // Each serving is 75g
+    const foodTypes = formData.getAll('foodType[]') as string[];
+    const servingsList = formData.getAll('servings[]') as string[];
+
+    if (foodTypes.length !== servingsList.length) {
+        return { message: 'Invalid input: mismatched entries' };
+    }
 
     try {
-        const activityId = foodType === 'fish'
-            ? 'agriculture_fishing_forestry-type_fish_farmed-origin_region_global'
-            : 'consumer_goods-type_meat_products_beef';
+        let totalEmissions = 0;
 
-        const result = await calculateFoodEmissions({
-            activityId,
-            weight,
-            weightUnit: 'g',
-            distance: 0,
-            distanceUnit: 'km',
-        });
+        for (let i = 0; i < foodTypes.length; i++) {
+            const foodType = foodTypes[i];
+            const servings = Number(servingsList[i]);
+            const weight = servings * 75; // Each serving is 75g
 
-        await saveEmissionResult(userId, 'food', result.co2e);
+            const activityId =
+                foodType === 'fish'
+                    ? 'agriculture_fishing_forestry-type_fish_farmed-origin_region_global'
+                    : 'consumer_goods-type_meat_products_beef';
+
+            const result = await calculateFoodEmissions({
+                activityId,
+                weight,
+                weightUnit: 'g',
+                distance: 0,
+                distanceUnit: 'km',
+            });
+
+            totalEmissions += result.co2e;
+        }
+
+        await saveEmissionResult(userId, 'food', totalEmissions);
         revalidatePath('/input/food');
 
-        return { message: `Emissions: ${result.co2e} kg CO2e` };
+        return { message: `Total Emissions: ${totalEmissions.toFixed(2)} kg CO2e` };
     } catch (error) {
         return { message: 'Failed to calculate emissions' };
     }

@@ -1,3 +1,5 @@
+// src/services/climatiqService.ts
+
 import axios from 'axios';
 import { db } from '../index'; // Adjust if db import path differs
 import { carbonResults } from '../db/schema';
@@ -16,27 +18,33 @@ interface EmissionRequestParams {
 }
 
 export const calculateTransportationEmissions = async ({
-                                             activityId,
-                                             passengers = 1,
-                                             distance,
-                                             distanceUnit,
-                                         }: EmissionRequestParams) => {
+                                                           activityId,
+                                                           distance,
+                                                           distanceUnit,
+                                                       }: {
+    activityId: string;
+    distance: number;
+    distanceUnit: 'km' | 'mi';
+}) => {
     try {
-        const isBus = activityId.includes("bus");
+        // Determine default passengers based on activityId
+        const passengers = activityId.includes('bus') ? 30 : 4;
+
+        const isBus = activityId.includes('bus');
 
         const response = await axios.post(
             BASE_URL,
             {
                 emission_factor: {
                     activity_id: activityId,
-                    source: isBus ? "UBA" : "ADEME",
-                    region: isBus ? "DE" : "FR",
+                    source: isBus ? 'UBA' : 'ADEME',
+                    region: isBus ? 'DE' : 'FR',
                     year: isBus ? 2020 : 2021,
-                    source_lca_activity: isBus ? "upstream-fuel_combustion" : "fuel_upstream-fuel_combustion",
-                    data_version: "^0",
+                    source_lca_activity: isBus ? 'upstream-fuel_combustion' : 'fuel_upstream-fuel_combustion',
+                    data_version: '^0',
                 },
                 parameters: {
-                    passengers,
+                    passengers, // Static passengers for car/bus
                     distance,
                     distance_unit: distanceUnit,
                 },
@@ -55,6 +63,9 @@ export const calculateTransportationEmissions = async ({
         throw error;
     }
 };
+
+
+
 
 export const calculateFoodEmissions = async ({
                                                  activityId,
