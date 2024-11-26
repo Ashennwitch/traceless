@@ -25,16 +25,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             type: entry.type as CarbonResult["type"], // Type assertion for `type`
         })) as CarbonResult[];
 
-        // Aggregate the data
+        // Aggregate the data by date (use full date, not just month-year)
         const aggregatedData: AggregatedData = results.reduce((acc, entry) => {
-            const date = new Date(entry.createdAt).toISOString().slice(0, 7); // YYYY-MM format
-            if (!acc[date]) {
-                acc[date] = { date, food: 0, transport: 0, household: 0 };
+            const date = new Date(entry.createdAt);
+            const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+            if (!acc[formattedDate]) {
+                acc[formattedDate] = { date: formattedDate, food: 0, transport: 0, household: 0 };
             }
 
-            if (entry.type === "food") acc[date].food += entry.result;
-            if (entry.type === "transportation") acc[date].transport += entry.result;
-            if (entry.type === "household") acc[date].household += entry.result;
+            if (entry.type === "food") acc[formattedDate].food += entry.result;
+            if (entry.type === "transportation") acc[formattedDate].transport += entry.result;
+            if (entry.type === "household") acc[formattedDate].household += entry.result;
 
             return acc;
         }, {} as AggregatedData);
@@ -44,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
+        // Respond with the aggregated data
         res.status(200).json(formattedData);
     } catch (error) {
         console.error("Error fetching carbon footprint history:", error);
