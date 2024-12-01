@@ -1,3 +1,5 @@
+// src/app/(root)/input/page.tsx
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -52,13 +54,15 @@ export default function InputPage() {
                 </div>
             </section>
 
-            {/* Call-to-Action Section */}
+            {/* Navigate to Dashboard */}
             <section className="py-12 bg-green-600 text-white">
                 <div className="container mx-auto text-center">
-                    <h2 className="text-2xl font-bold mb-4">Take Action Today</h2>
-                    <button className="bg-white text-green-600 px-6 py-3 font-semibold rounded shadow hover:bg-gray-200">
-                        Back to Home
-                    </button>
+                    <h2 className="text-2xl font-bold mb-4">See Your Dashboard</h2>
+                    <Link href="/dashboard">
+                        <button className="bg-white text-green-600 px-6 py-3 font-semibold rounded shadow hover:bg-gray-200">
+                            Go to Dashboard
+                        </button>
+                    </Link>
                 </div>
             </section>
         </div>

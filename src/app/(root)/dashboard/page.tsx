@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, PieChart, Pie } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, PieChart, Pie , Cell, LabelList} from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import PersonalizedSuggestions from "./suggestions/PersonalizedSuggestions";
@@ -64,7 +64,8 @@ const mockDataWeek = Array.from({ length: 7 }, (_, i) => {
 });
 
 export default function DashboardPage() {
-    const [timeRange, setTimeRange] = useState("6 months");
+    // Set default timeRange to '1 week' for initial load
+    const [timeRange, setTimeRange] = useState("1 week");
     const [chartData, setChartData] = useState<ChartData[]>([]);
 
     const [previousData, setPreviousData] = useState({
@@ -94,7 +95,6 @@ export default function DashboardPage() {
             }
         }
         fetchData();
-
 
         // Uncomment this block to use mock data
         /*
@@ -143,34 +143,41 @@ export default function DashboardPage() {
                 </select>
             </div>
 
-            {/* Area Chart */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Carbon Footprint Over Time</CardTitle>
-                    <CardDescription>
-                        Visualizing your historical emissions by category.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig}>
-                        <AreaChart
-                            data={aggregatedData}
-                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis tickFormatter={(value) => `${value} kg`} />
-                            <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                            <Area dataKey="food" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
-                            <Area dataKey="transport" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
-                            <Area dataKey="household" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
-                        </AreaChart>
-                    </ChartContainer>
-                </CardContent>
-            </Card>
+            {/* Flex container to align charts side by side */}
+            <div className="flex gap-8">
+                {/* Carbon Footprint Over Time Chart */}
+                <div className="w-1/2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Carbon Footprint Over Time</CardTitle>
+                            <CardDescription>
+                                Visualizing your historical emissions by category.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <ChartContainer config={chartConfig}>
+                                <AreaChart
+                                    data={aggregatedData}
+                                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="date" />
+                                    <YAxis tickFormatter={(value) => `${value} kg`} />
+                                    <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+                                    <Area dataKey="food" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                    <Area dataKey="transport" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                    <Area dataKey="household" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                </AreaChart>
+                            </ChartContainer>
+                        </CardContent>
+                    </Card>
+                </div>
 
-            {/* Pie Chart */}
-            <PieChartCard data={aggregatedData} />
+                {/* Carbon Footprint by Category Pie Chart */}
+                <div className="w-1/2">
+                    <PieChartCard data={aggregatedData} />
+                </div>
+            </div>
 
             {/* Personalized Suggestions */}
             <PersonalizedSuggestions aggregatedData={totalAggregatedData} />
@@ -213,7 +220,7 @@ function aggregateByWeek(data: ChartData[]): AggregatedData[] {
     data.forEach((entry) => {
         const week = weekFormatter(new Date(entry.date));
         if (!result[week]) {
-            result[week] = { date: `Week of ${week}`, food: 0, transport: 0, household: 0 };
+            result[week] = { date: week, food: 0, transport: 0, household: 0 };
         }
         result[week].food += entry.food;
         result[week].transport += entry.transport;
@@ -223,70 +230,51 @@ function aggregateByWeek(data: ChartData[]): AggregatedData[] {
     return Object.values(result);
 }
 
-// Pie Chart Component
-const PieChartCard = ({ data }: { data: AggregatedData[] }) => {
-    const aggregatedData = data.reduce<AggregatedData>(
-        (acc, entry) => {
-            acc.food += entry.food || 0;
-            acc.transport += entry.transport || 0;
-            acc.household += entry.household || 0;
-            return acc;
-        },
-        { date: "", food: 0, transport: 0, household: 0 }
+// Pie Chart Card for Carbon Footprint by Category
+
+function PieChartCard({ data }: { data: AggregatedData[] }) {
+    const totalEmissions = data.reduce(
+        (acc, entry) => ({
+            food: acc.food + entry.food,
+            transport: acc.transport + entry.transport,
+            household: acc.household + entry.household,
+        }),
+        { food: 0, transport: 0, household: 0 }
     );
 
     const pieData = [
-        { name: "Food", value: aggregatedData.food, fill: "hsl(var(--chart-1))" },
-        { name: "Transport", value: aggregatedData.transport, fill: "hsl(var(--chart-2))" },
-        { name: "Household", value: aggregatedData.household, fill: "hsl(var(--chart-3))" },
+        { name: 'Food', value: totalEmissions.food, fill: 'hsl(var(--chart-1))' },
+        { name: 'Transport', value: totalEmissions.transport, fill: 'hsl(var(--chart-2))' },
+        { name: 'Household', value: totalEmissions.household, fill: 'hsl(var(--chart-3))' }
     ];
 
-    const isDataEmpty = pieData.every((entry) => entry.value === 0);
-
     return (
-        <Card className="flex flex-col mt-8">
-            <CardHeader className="items-center pb-0">
+        <Card>
+            <CardHeader>
                 <CardTitle>Carbon Footprint by Category</CardTitle>
-                <CardDescription>Category breakdown for the selected period.</CardDescription>
+                <CardDescription>
+                    Distribution of emissions across different categories.
+                </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 pb-0">
-                {isDataEmpty ? (
-                    <div className="text-center text-muted-foreground">
-                        No data available for the selected period.
-                    </div>
-                ) : (
-                    <PieChart width={400} height={400} style={{ overflow: "visible" }}>
+            <CardContent>
+                <ChartContainer config={chartConfig}>
+                    <PieChart width={300} height={300}>
                         <Pie
                             data={pieData}
                             dataKey="value"
-                            nameKey="name"
-                            innerRadius={80}
-                            outerRadius={120}
-                            strokeWidth={2}
-                            paddingAngle={5}
-                            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-                                const RADIAN = Math.PI / 180;
-                                const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                                const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                                const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                                return (
-                                    <text
-                                        x={x}
-                                        y={y}
-                                        fill="black"
-                                        textAnchor={x > cx ? "start" : "end"}
-                                        dominantBaseline="central"
-                                        fontSize="12px"
-                                    >
-                                        {`${name}: ${(percent * 100).toFixed(1)}%`}
-                                    </text>
-                                );
-                            }}
-                            labelLine={false}
-                        />
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={100}
+                            label={({ name, value }) => `${name}: ${value} kg`} // Optional, you can adjust this
+                        >
+                            {/* Customizing each slice with a distinct color */}
+                            {pieData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                        </Pie>
                     </PieChart>
-                )}
+                </ChartContainer>
             </CardContent>
         </Card>
     );
-};
+}

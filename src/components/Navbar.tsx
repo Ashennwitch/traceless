@@ -28,6 +28,7 @@ export default function Navbar() {
 
                 {/* Links */}
                 <div className={`md:flex items-center space-x-8 ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
+                    {/* Updated href to target sections */}
                     <Link href="#features" className="text-gray-700 hover:text-green-600 transition">
                         Features
                     </Link>
@@ -37,7 +38,7 @@ export default function Navbar() {
                     <Link href="#contact" className="text-gray-700 hover:text-green-600 transition">
                         Contact
                     </Link>
-                    <Link href="#get-started" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500 transition">
+                    <Link href="/input" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500 transition">
                         Get Started
                     </Link>
 
