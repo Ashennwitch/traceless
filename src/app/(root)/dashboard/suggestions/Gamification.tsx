@@ -1,3 +1,5 @@
+// src/app/(root)/dashboard/suggestions/Gamification.tsx
+
 "use client";
 
 import React from "react";

@@ -1,3 +1,5 @@
+// src/app/(root)/input/food/FoodForm.tsx
+
 'use client';
 
 import React, { useState } from 'react';

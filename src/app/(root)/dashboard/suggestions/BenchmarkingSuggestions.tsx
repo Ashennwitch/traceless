@@ -1,3 +1,5 @@
+// src/app/(root)/dashboard/suggestions/BenchmarkingSuggestions.tsx
+
 "use client";
 
 import React from "react";

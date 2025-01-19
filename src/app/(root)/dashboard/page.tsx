@@ -1,3 +1,5 @@
+// src/app/(root)/dashboard/page.tsx
+
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -76,7 +78,7 @@ export default function DashboardPage() {
 
     useEffect(() => {
         // Uncomment this block to fetch real data from the API
-
+/*
         async function fetchData() {
             try {
                 const response = await fetch("/api/carbon-footprint-history");
@@ -95,9 +97,9 @@ export default function DashboardPage() {
             }
         }
         fetchData();
-
+*/
         // Uncomment this block to use mock data
-        /*
+
         if (timeRange === "6 months") {
             setChartData(mockData6Months);
         } else if (timeRange === "1 month") {
@@ -106,7 +108,7 @@ export default function DashboardPage() {
             setChartData(mockDataWeek);
         }
         setPreviousData({ food: 60, transport: 80, household: 70 }); // Mock previous data
-        */
+
     }, [timeRange]);
 
     const aggregatedData = useMemo(() => {
