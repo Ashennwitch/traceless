@@ -12,26 +12,16 @@ Traceless is a [Next.js](https://nextjs.org) project designed to help individual
 ## Tech Stack
 
 ### Frontend
-<img alt="React" src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">
-<img alt="Next.js" src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
-<img alt="TailwindCSS" src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white">
-<img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn/ui-%231d1d1d.svg?style=for-the-badge&logoColor=white">
+<img alt="React" src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"> <img alt="Next.js" src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"> <img alt="TailwindCSS" src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white"> <img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn/ui-%231d1d1d.svg?style=for-the-badge&logoColor=white">
 
 ### Backend
-<img alt="NodeJS" src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white">
-<img alt="Express.js" src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB">
-<img alt="Clerk" src="https://img.shields.io/badge/clerk-%23003344.svg?style=for-the-badge&logoColor=white">
+<img alt="NodeJS" src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white"> <img alt="Express.js" src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB"> <img alt="Clerk" src="https://img.shields.io/badge/clerk-%23003344.svg?style=for-the-badge&logoColor=white">
 
 ### Database
-<img alt="Postgres" src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white">
-<img alt="Neon Database" src="https://img.shields.io/badge/neon-db-%230055FF.svg?style=for-the-badge&logo=postgresql&logoColor=white">
+<img alt="Postgres" src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white"> <img alt="Neon Database" src="https://img.shields.io/badge/neon-db-%230055FF.svg?style=for-the-badge&logo=postgresql&logoColor=white">
 
 ### Tools
-<img alt="JavaScript" src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E">
-<img alt="TypeScript" src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white">
-<img alt="Recharts" src="https://img.shields.io/badge/recharts-%2338B2AC.svg?style=for-the-badge&logo=recharts&logoColor=white">
-<img alt="Vercel" src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white">
-<img alt="NPM" src="https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white">
+<img alt="JavaScript" src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"> <img alt="TypeScript" src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white"> <img alt="Recharts" src="https://img.shields.io/badge/recharts-%2338B2AC.svg?style=for-the-badge&logo=recharts&logoColor=white"> <img alt="Vercel" src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"> <img alt="NPM" src="https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white">
 
 ## Getting Started
 
